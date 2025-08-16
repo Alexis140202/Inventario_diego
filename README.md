@@ -31,5 +31,7 @@ git add .
 git commit -m "comentario(cambio que hiciste)"
 git push
 
+-
+
 -- Folder de vistas
 Resources/js/pages
