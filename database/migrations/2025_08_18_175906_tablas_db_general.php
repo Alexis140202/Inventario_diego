@@ -12,20 +12,32 @@ return new class extends Migration
     public function up(): void
     {
         // Crear tabla de tiendas
-         Schema::create('tiendas', function (Blueprint $table) {
-        $table->id();
-        $table->string('nombre');
-        $table->string('descripcion');
-        $table->string('imagen')->nullable();
-        $table->timestamps();
-    });
+        Schema::create('tiendas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 191);
+            $table->string('descripcion', 255)->nullable();
+            $table->longText('imagen')->nullable();
+            $table->timestamps();
+        });
+
+        // Crear tabla de Categorias
+        Schema::create('categorias', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 191);
+            $table->timestamps();
+        });
+
+        //tabla de marcas relacionado con categorias
+        Schema::create('marcas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 191);
+            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        //
-    }
+    public function down(): void {}
 };

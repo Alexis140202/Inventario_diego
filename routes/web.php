@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\MarcaController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TiendaController;
@@ -12,6 +14,10 @@ Route::get('/Tiendas', function () {
     return Inertia::render('PagesAdmin/Tiendas/DashboardTiendas');
 })->name('tiendas');
 
+Route::get('/CategoriasDashboard', function () {
+    return Inertia::render('PagesAdmin/Categorias/DashboardCategorias');
+})->name('categorias');
+
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
@@ -20,6 +26,12 @@ Route::get('dashboard', function () {
 
 //Tiendas
 Route::resource('tiendas', TiendaController::class);
+
+//Categorias
+Route::resource('categorias', CategoriasController::class);
+
+//Marca
+Route::resource('marcas', MarcaController::class);
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

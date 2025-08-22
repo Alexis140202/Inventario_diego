@@ -13,7 +13,8 @@ npm install
 --
 Cambios en la DB
 php artisan migrate
-
+ -- correr 1 migracion 
+ php artisan migrate --path=database/migrations/0001_01_01_000000_create_users_table.php
 
 git pull - traer cambios
 

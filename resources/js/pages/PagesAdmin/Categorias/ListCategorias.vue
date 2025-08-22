@@ -3,7 +3,7 @@
         <div class="mb-8 flex items-center justify-between">
             <h2 class="flex items-center text-2xl font-bold text-gray-800">
                 <StoreIcon class="mr-2 h-6 w-6" />
-                Lista de Tiendas
+                Lista de Categorias
             </h2>
         </div>
 
@@ -20,20 +20,7 @@
                                 Nombre
                             </div>
                         </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            <div class="flex items-center">
-                                <AlignLeftIcon class="mr-1 h-4 w-4" />
-                                Descripción
-                            </div>
-                        </th>
-                        <th scope="col"
-                            class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            <div class="flex items-center">
-                                <ImageIcon class="mr-1 h-4 w-4" />
-                                Foto
-                            </div>
-                        </th>
+
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                             <div class="flex items-center">
@@ -49,6 +36,13 @@
                             </div>
                         </th>
                         <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
+                            <div class="flex items-center">
+                                <CalendarCheckIcon class="mr-1 h-4 w-4" />
+                                Marcas
+                            </div>
+                        </th>
+                        <th scope="col"
                             class="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
                             Acciones</th>
                     </tr>
@@ -59,28 +53,19 @@
                         <td class="px-6 py-4 text-sm font-semibold whitespace-nowrap text-gray-800">
                             {{ tienda.nombre }}
                         </td>
-                        <td class="max-w-xs truncate px-6 py-4 text-sm text-gray-500">
-                            {{ tienda.descripcion }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="h-12 w-12 flex items-center justify-center">
-                                <img v-if="tienda.foto" :src="tienda.foto" alt="Foto"
-                                    class="h-12 w-12 cursor-pointer rounded-lg border border-gray-200 object-cover"
-                                    @click="openImageModal(tienda.foto)" />
-                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-300" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor"
-                                        stroke-width="2" fill="none" />
-                                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                                    <path stroke="currentColor" stroke-width="2" d="M21 15l-5-5-4 4-5-5" />
-                                </svg>
-                            </div>
-                        </td>
+
                         <td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                             {{ tienda.creacion }}
                         </td>
                         <td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                             {{ tienda.actualizacion }}
+                        </td>
+                        <td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500 flex items-center space-x-2">
+                            {{ tienda.marcas.length }}
+                            <button class="rounded-full p-1 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-900"
+                                title="Ver marcas" @click="abrirModalEditarMarcas(tienda)">
+                                <EyeIcon class="h-5 w-5" />
+                            </button>
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                             <div class="flex justify-end space-x-2">
@@ -102,46 +87,49 @@
         <!-- Vista de tarjetas para móvil -->
         <div class="grid grid-cols-1 gap-4 md:hidden">
             <div v-for="tienda in tiendas" :key="tienda.id"
-                class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-                <div class="flex items-start space-x-4">
-                    <img v-if="tienda.foto" :src="tienda.foto" alt="Foto"
-                        class="h-16 w-16 cursor-pointer rounded-lg border border-gray-200 object-cover"
-                        @click="openImageModal(tienda.foto)" />
-                    <svg v-else xmlns="http://www.w3.org/2000/svg"
-                        class="h-16 w-16 text-gray-300 rounded-lg border border-gray-200" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"
-                            fill="none" />
-                        <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                        <path stroke="currentColor" stroke-width="2" d="M21 15l-5-5-4 4-5-5" />
-                    </svg>
-                    <div class="flex-1">
-                        <div class="flex items-start justify-between">
-                            <h3 class="text-lg font-semibold text-gray-800">{{ tienda.nombre }}</h3>
+                class="rounded-xl border border-gray-200 bg-white p-4 shadow transition hover:shadow-md">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ tienda.nombre }}</h3>
 
-                        </div>
-                        <p class="mt-1 text-sm text-gray-600">{{ tienda.descripcion }}</p>
+                    <!-- Chips de marcas -->
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span v-if="tienda.marcas.length === 0" class="text-gray-400 text-xs">Sin marcas</span>
+                        <span v-for="marca in tienda.marcas.slice(0, 3)" :key="marca.id"
+                            class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                            <TagIcon class="mr-1 h-3 w-3 text-green-500" /> {{ marca.nombre }}
+                        </span>
+                        <button class="rounded-full p-1 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-900"
+                            title="Editar marcas" @click="abrirModalEditarMarcas(tienda)">
+                            <EyeIcon class="h-5 w-5" />
+                        </button>
+                        <span v-if="tienda.marcas.length > 3"
+                            class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                            +{{ tienda.marcas.length - 3 }} más
+                        </span>
+                    </div>
 
-                        <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
-                            <div class="flex items-center text-gray-500">
-                                <CalendarPlusIcon class="mr-1 h-4 w-4" />
-                                <span>{{ tienda.creacion }}</span>
-                            </div>
-                            <div class="flex items-center text-gray-500">
-                                <CalendarCheckIcon class="mr-1 h-4 w-4" />
-                                <span>{{ tienda.actualizacion }}</span>
-                            </div>
+                    <div class="grid grid-cols-1 gap-2 text-sm mb-3">
+                        <div class="flex items-center text-gray-500">
+                            <CalendarPlusIcon class="mr-1 h-4 w-4" />
+                            <span class="font-semibold mr-1">Creación:</span>
+                            <span>{{ tienda.creacion }}</span>
                         </div>
+                        <div class="flex items-center text-gray-500">
+                            <CalendarCheckIcon class="mr-1 h-4 w-4" />
+                            <span class="font-semibold mr-1">Actualización:</span>
+                            <span>{{ tienda.actualizacion }}</span>
+                        </div>
+                    </div>
 
-                        <div class="mt-3 flex space-x-2">
-                            <button class="rounded-full p-1 text-blue-600 hover:bg-blue-50 hover:text-blue-900"
-                                @click="abrirModalEdicion(tienda)">
-                                <EditIcon class="h-5 w-5" />
-                            </button>
-                            <button class="rounded-full p-1 text-red-600 hover:bg-red-50 hover:text-red-900">
-                                <Trash2Icon class="h-5 w-5" />
-                            </button>
-                        </div>
+                    <div class="flex justify-end space-x-2 mt-2">
+                        <button class="rounded-full p-2 text-blue-600 hover:bg-blue-50 hover:text-blue-900"
+                            @click="abrirModalEdicion(tienda)">
+                            <EditIcon class="h-5 w-5" />
+                        </button>
+                        <button class="rounded-full p-2 text-red-600 hover:bg-red-50 hover:text-red-900"
+                            @click="eliminarTienda(tienda.id)">
+                            <Trash2Icon class="h-5 w-5" />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -187,8 +175,9 @@
         </div>
     </div>
 
-    <UpdateTiendas :open="showEditModal" :tienda="tiendaSeleccionada" @close="cerrarModalEdicion" />
-
+    <UpdateCategorias :open="showEditModal" :tienda="tiendaSeleccionada" @close="cerrarModalEdicion" />
+    <ListMarcas :open="showMarcasModal" :categoria-id="tiendaSeleccionada?.id" :marcas="marcasSeleccionadas"
+        @close="showMarcasModal = false" />
 
 
 </template>
@@ -201,7 +190,10 @@ const tiendaAEliminar = ref<number | null>(null);
 const showSuccessModal = ref(false);
 const showEditModal = ref(false);
 const tiendaSeleccionada = ref<any>(null);
+const marcasSeleccionadas = ref<any[]>([]);
+const showMarcasModal = ref(false);
 import {
+    EyeIcon,
     AlignLeftIcon,
     CalendarCheckIcon,
     CalendarPlusIcon,
@@ -215,7 +207,8 @@ import {
 } from 'lucide-vue-next';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
-import UpdateTiendas from './UpdateTiendas.vue';
+import UpdateCategorias from './UpdateCategorias.vue';
+import ListMarcas from '../Marcas/ListMarcas.vue';
 
 interface Tienda {
     id: number;
@@ -234,6 +227,7 @@ const tiendas = ref<Array<{
     foto: string;
     creacion: string;
     actualizacion: string;
+    marcas: any[];
 }>>([]);
 onMounted(async () => {
     await cargarTiendas();
@@ -241,21 +235,21 @@ onMounted(async () => {
 
 async function cargarTiendas() {
     try {
-        const response = await axios.get('/tiendas');
-        tiendas.value = response.data.map((tienda: Tienda) => ({
-            id: tienda.id,
-            nombre: tienda.nombre,
-            descripcion: tienda.descripcion,
-            foto: tienda.imagen ? `/storage/${tienda.imagen}` : '',
-            creacion: tienda.created_at
-                ? new Date(tienda.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        const response = await axios.get('/categorias');
+        tiendas.value = response.data.map((categoria: any) => ({
+            id: categoria.id,
+            nombre: categoria.nombre,
+            marcas: categoria.marcas || [],
+            creacion: categoria.created_at
+                ? new Date(categoria.created_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                 : '',
-            actualizacion: tienda.updated_at
-                ? new Date(tienda.updated_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+            actualizacion: categoria.updated_at
+                ? new Date(categoria.updated_at).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                 : '',
         }));
+        console.log('Categorias cargadas:', tiendas.value);
     } catch (error) {
-        console.error('Error al obtener tiendas:', error);
+        console.error('Error al obtener categorias:', error);
     }
 }
 
@@ -277,7 +271,7 @@ async function eliminarTienda(id: number) {
 async function confirmarEliminar() {
     if (tiendaAEliminar.value === null) return;
     try {
-        await axios.delete(`/tiendas/${tiendaAEliminar.value}`);
+        await axios.delete(`/categorias/${tiendaAEliminar.value}`);
         await cargarTiendas();
         showSuccessModal.value = true; // Muestra el modal de éxito
     } catch (error) {
@@ -305,5 +299,10 @@ function abrirModalEdicion(tienda: any) {
 function cerrarModalEdicion() {
     showEditModal.value = false;
     tiendaSeleccionada.value = null;
+}
+function abrirModalEditarMarcas(tienda: any) {
+    marcasSeleccionadas.value = tienda.marcas || [];
+    showMarcasModal.value = true;
+    // Aquí puedes abrir el modal o pasar las marcas al componente
 }
 </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tienda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TiendaController extends Controller
 {
@@ -70,7 +71,33 @@ class TiendaController extends Controller
      */
     public function update(Request $request, Tienda $tienda)
     {
-        $tienda->update($request->only(['nombre', 'descripcion', 'imagen']));
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'imagen' => 'nullable|image|max:2048',
+        ]);
+
+        // Si la imagen es null, borra la actual
+        if ($request->has('imagen') && $request->imagen === null) {
+            if ($tienda->imagen) {
+                Storage::disk('public')->delete($tienda->imagen);
+            }
+            $tienda->imagen = null;
+        }
+
+        // Si hay una nueva imagen, reemplaza la anterior
+        if ($request->hasFile('imagen')) {
+            if ($tienda->imagen) {
+                Storage::disk('public')->delete($tienda->imagen);
+            }
+            $imagenPath = $request->file('imagen')->store('tiendas', 'public');
+            $tienda->imagen = $imagenPath;
+        }
+
+        $tienda->nombre = $request->nombre;
+        $tienda->descripcion = $request->descripcion;
+        $tienda->save();
+
         return response()->json($tienda);
     }
 

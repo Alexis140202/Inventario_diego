@@ -34,6 +34,11 @@ const mainNavItems: NavItem[] = [
         href: '/ventas-caja',
         icon: DollarSign,
     },
+    {
+        title: 'Categorias',
+        href: '/CategoriasDashboard',
+        icon: DollarSign,
+    },
 ];
 
 

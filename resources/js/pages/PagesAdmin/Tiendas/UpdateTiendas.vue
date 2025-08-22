@@ -68,10 +68,10 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, ref } from 'vue';
+import { defineEmits, defineProps, ref, watch } from 'vue';
 import axios from 'axios';
 
-const props = defineProps<{ open: boolean }>();
+const props = defineProps<{ open: boolean, tienda?: any }>();
 const emit = defineEmits(['close']);
 
 const form = ref({
@@ -108,26 +108,43 @@ function resetForm() {
     previewUrl.value = null;
 }
 function submitForm() {
+    if (!props.tienda || !props.tienda.id) return;
+
     const formData = new FormData();
     formData.append('nombre', form.value.nombre);
     formData.append('descripcion', form.value.descripcion);
+
+    // Si se seleccionó una nueva imagen
     if (form.value.foto) {
         formData.append('imagen', form.value.foto);
+    } else if (!previewUrl.value) {
+        // Si se quitó la imagen, enviar imagen como null
+        formData.append('imagen', '');
     }
 
-    axios.post('/tiendas', formData)
+    axios.post(`/tiendas/${props.tienda.id}`, formData, {
+        headers: { 'X-HTTP-Method-Override': 'PUT' }
+    })
         .then(() => {
-            confirmMessage.value = '¡Tienda creada exitosamente!';
+            confirmMessage.value = '¡Tienda actualizada exitosamente!';
 
             setTimeout(() => {
                 resetForm();
                 emitClose();
-            }, 1500); // Cierra el modal después de 1.5 segundos
+            }, 1500);
+
         })
         .catch(error => alert('Error: ' + error.response.data.message));
 }
 
-
+watch(() => props.tienda, (newTienda) => {
+    if (newTienda) {
+        form.value.nombre = newTienda.nombre || '';
+        form.value.descripcion = newTienda.descripcion || '';
+        form.value.foto = null;
+        previewUrl.value = newTienda.foto || (newTienda.imagen ? `/storage/${newTienda.imagen}` : null);
+    }
+}, { immediate: true });
 </script>
 
 <style scoped>
