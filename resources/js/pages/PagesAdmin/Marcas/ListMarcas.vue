@@ -20,6 +20,7 @@
                         Agregar Marca
                     </button>
                 </div>
+
                 <!-- Filtro de búsqueda y orden -->
                 <div class="mb-4 flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0">
                     <input v-model="search" type="text" placeholder="Buscar por nombre..."
