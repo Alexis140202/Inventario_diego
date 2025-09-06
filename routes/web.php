@@ -10,6 +10,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
+Route::get('Funcionalidades', function () {
+    return Inertia::render('Funcionalidades');
+})->name('Funcionalidades');
+
+
 Route::get('/Tiendas', function () {
     return Inertia::render('PagesAdmin/Tiendas/DashboardTiendas');
 })->name('tiendas');

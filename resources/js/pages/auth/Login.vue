@@ -17,70 +17,53 @@ defineProps<{
 </script>
 
 <template>
-    <AuthBase title="Log in to your account" description="Enter your email and password below to log in">
+    <AuthBase title="Inicia sesión en tu cuenta"
+        description="Ingresa tu correo electrónico y contraseña a continuación para iniciar sesión en tu cuenta">
+
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-sm font-medium text-center text-green-600">
             {{ status }}
         </div>
-        
-        <Form method="post" :action="route('login')" :reset-on-success="['password']" v-slot="{ errors, processing }" class="flex flex-col gap-6">
+
+        <Form method="post" :action="route('login')" :reset-on-success="['password']" v-slot="{ errors, processing }"
+            class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input
-                        id="email"
-                        type="email"
-                        name="email"
-                        required
-                        autofocus
-                        :tabindex="1"
-                        autocomplete="email"
-                        placeholder="email@example.com"
-                    />
+                    <Label for="email">Correo Electronico</Label>
+                    <Input id="email" type="email" name="email" required autofocus :tabindex="1" autocomplete="email"
+                        placeholder="correoelectronico@ejemplo.com" />
                     <InputError :message="errors.email" />
                 </div>
 
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
-                        <TextLink v-if="canResetPassword" :href="route('password.request')" class="text-sm" :tabindex="5">
-                            Forgot password?
+                        <Label for="password">Contraseña</Label>
+                        <TextLink v-if="canResetPassword" :href="route('password.request')" class="text-sm"
+                            :tabindex="5">
+                            Olvidó su contraseña?
                         </TextLink>
                     </div>
-                    <Input
-                        id="password"
-                        type="password"
-                        name="password"
-                        required
-                        :tabindex="2"
-                        autocomplete="current-password"
-                        placeholder="Password"
-                    />
+                    <Input id="password" type="password" name="password" required :tabindex="2"
+                        autocomplete="current-password" placeholder="Contraseña" />
                     <InputError :message="errors.password" />
                 </div>
 
                 <div class="flex items-center justify-between">
                     <Label for="remember" class="flex items-center space-x-3">
                         <Checkbox id="remember" name="remember" :tabindex="3" />
-                        <span>Remember me</span>
+                        <span>Recordarme</span>
                     </Label>
                 </div>
 
-                <Button type="submit" class="w-full mt-4" :tabindex="4" :disabled="processing">
+                <Button type="submit"
+                    class="w-full mt-4 rounded-full bg-[#00A3FF] text-white font-semibold py-2 hover:bg-[#0095E0] transition disabled:opacity-50"
+                    :tabindex="4" :disabled="processing">
                     <LoaderCircle v-if="processing" class="w-4 h-4 animate-spin" />
-                    Log in
+                    Iniciar sesión
                 </Button>
             </div>
-
-            <div class="text-sm text-center text-muted-foreground">
-                Don't have an account?
-                <TextLink :href="route('register')" :tabindex="5">Sign up</TextLink>
-            </div>
         </Form>
-
-        <barradeslizadora />
-        
 
     </AuthBase>
 </template>
