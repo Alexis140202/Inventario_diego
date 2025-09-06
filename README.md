@@ -49,3 +49,4 @@ git add -f storage/app/public/tiendas/*
 
 ⚡ Optimización del proyecto
 php artisan optimize:clear   # Limpieza de caché y optimización 🧹
+
