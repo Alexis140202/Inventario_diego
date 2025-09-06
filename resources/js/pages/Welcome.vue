@@ -2,8 +2,6 @@
 import { Head, Link } from '@inertiajs/vue3';
 
 import { ref } from 'vue'
-import { Dialog, DialogPanel } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import Headerwelcome from '@/components/header_principal/headerwelcome.vue';
 
 
