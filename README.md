@@ -36,3 +36,8 @@ git push
 
 -- Folder de vistas
 Resources/js/pages
+
+jordy es cabro y agregue dos dependencias
+
+npm install @headlessui/vue
+npm install @heroicons/vue
