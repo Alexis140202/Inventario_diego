@@ -36,4 +36,7 @@ jordy es cabro y agregue dos dependencias
 npm install @headlessui/vue
 npm install @heroicons/vue
 
-xdd
+Subir imagenes
+git add -f storage/app/public/tiendas/*
+
+cambias "tiendas" por la carpeta de imagenes que tengas 
