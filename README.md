@@ -1,42 +1,51 @@
-Iniciar Proyecto
+# 🛠️ Guía de Desarrollo Laravel + Vue  
 
-php artisan serve
-npm run dev
+## ▶️ Iniciar el proyecto  
+```bash
+php artisan serve     # Levantar servidor Laravel 🌐
+npm run dev           # Iniciar Vite (assets) ⚡
 
---Dependencias
+📦 Instalación de dependencias
+composer install   # Dependencias de PHP 🐘
+npm install        # Dependencias de Node 📦
+🗄️ Migraciones de Base de Datos
+php artisan migrate   # Ejecutar todas las migraciones ✅
 
-composer install
-npm install
 
---
-Cambios en la DB
-php artisan migrate
--- correr 1 migracion
+👉 Para correr una migración específica:
+
 php artisan migrate --path=database/migrations/0001_01_01_000000_create_users_table.php
 
-git pull - traer cambios
+🔄 Actualizar código desde GitHub
+git pull   # Traer los últimos cambios 📥
 
---resetear cambios (eliminar los locales y traer los del github)
+
+👉 Si quieres resetear cambios locales y traer todo desde GitHub:
 
 git reset --hard
 git pull --force
 
--- commit
+📝 Flujo de commits
+git init                          # Inicializar repositorio 📂
+git add .                         # Agregar cambios ✨
+git commit -m "mensaje de cambio" # Confirmar cambios 📝
+git push                          # Subir al repositorio 🚀
 
-git init
-git add .
-git commit -m "comentario(cambio que hiciste)"
-git push
+📂 Ubicación de vistas (Vue Pages)
+resources/js/pages
 
-- -- Folder de vistas
-  Resources/js/pages
+🎨 Dependencias extra (UI/Icons)
+npm install @headlessui/vue   # Componentes accesibles para Vue ♿
+npm install @heroicons/vue    # Iconos bonitos en Vue 🎉
 
-jordy es cabro y agregue dos dependencias
+🖼️ Subir imágenes al repositorio
 
-npm install @headlessui/vue
-npm install @heroicons/vue
+👉 Si tus imágenes están en storage/app/public/tiendas:
 
-Subir imagenes
 git add -f storage/app/public/tiendas/*
 
-cambias "tiendas" por la carpeta de imagenes que tengas 
+
+🔁 Cambia "tiendas" por la carpeta que necesites.
+
+⚡ Optimización del proyecto
+php artisan optimize:clear   # Limpieza de caché y optimización 🧹
